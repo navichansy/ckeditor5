@@ -47,8 +47,14 @@ export function modelToViewUrlAttributeConverter( registry, options ) {
 		const viewWriter = conversionApi.writer;
 		const figure = conversionApi.mapper.toViewElement( data.item );
 
-		// TODO: removing it and creating it from scratch is a hack. We can do better than that.
-		viewWriter.remove( viewWriter.createRangeIn( figure ) );
+		for ( const child of figure.getChildren() ) {
+			if ( child.hasClass( 'ck-media__wrapper' ) ) {
+				// TODO: removing the wrapper and creating it from scratch is a hack. We can do better than that.
+				viewWriter.remove( viewWriter.createRangeOn( child ) );
+
+				break;
+			}
+		}
 
 		const mediaViewElement = registry.getMediaViewElement( viewWriter, url, options );
 
